@@ -1,6 +1,6 @@
 # How to contribute
 
-Contributions to PSLath are highly encouraged and desired.
+Contributions to <%=$PLASTER_PARAM_ModuleName%> are highly encouraged and desired.
 Below are some guidelines that will help make the process as smooth as possible.
 
 ## Getting Started
@@ -13,15 +13,15 @@ Below are some guidelines that will help make the process as smooth as possible.
 
 ## Suggesting Enhancements
 
-I want to know what you think is missing from PSLath and how it can be made better.
+I want to know what you think is missing from <%=$PLASTER_PARAM_ModuleName%> and how it can be made better.
 
 - When submitting an issue for an enhancement, please be as clear as possible about why you think the enhancement is needed and what the benefit of it would be.
 
 ## Making Changes
 
 - From your fork of the repository, create a topic branch where work on your change will take place.
-- To quickly create a topic branch based on master; `git checkout -b my_contribution master`.
-  Please avoid working directly on the `master` branch.
+- To quickly create a topic branch based on main, run `git switch -c my_contribution main`.
+  Please avoid working directly on the `main` branch.
 - Make commits of logical units.
 - Check for unnecessary whitespace with `git diff --check` before committing.
 - Please follow the prevailing code conventions in the repository.
@@ -42,14 +42,13 @@ I want to know what you think is missing from PSLath and how it can be made bett
 
 ## Documentation
 
-I am infallible and as such my documenation needs no corectoin.
-In the highly unlikely event that that is _not_ the case, commits to update or add documentation are highly apprecaited.
+Documentation improvements are welcome. Please update relevant documentation when behavior changes.
 
 ## Submitting Changes
 
 - Push your changes to a topic branch in your fork of the repository.
 - Submit a pull request to the main repository.
-- Once the pull request has been reviewed and accepted, it will be merged with the master branch.
+- Once the pull request has been reviewed and accepted, it will be merged with the main branch.
 - Celebrate
 
 ## Additional Resources

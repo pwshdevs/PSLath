@@ -1,0 +1,48 @@
+trigger:
+  - main
+
+pr:
+  - main
+
+pool:
+  vmImage: windows-latest
+
+stages:
+  - stage: Test
+    jobs:
+      - job: WindowsPowerShell
+        displayName: Windows PowerShell 5.1
+        steps:
+          - powershell: ./build.ps1 -Task Test -Bootstrap -Verbose
+            displayName: Build and Test with Windows PowerShell 5.1
+          - task: PublishTestResults@2
+            condition: succeededOrFailed()
+            inputs:
+              testResultsFormat: NUnit
+              testResultsFiles: '**/out/testResults.xml'
+              testRunTitle: windows_powershell_5_1
+            displayName: Publish Test Results
+
+      - job: PowerShell
+        displayName: PowerShell 7
+        steps:
+          - pwsh: ./build.ps1 -Task Test -Bootstrap -Verbose
+            displayName: Build and Test with PowerShell 7
+          - task: PublishTestResults@2
+            condition: succeededOrFailed()
+            inputs:
+              testResultsFormat: NUnit
+              testResultsFiles: '**/out/testResults.xml'
+              testRunTitle: powershell_7
+            displayName: Publish Test Results
+
+  - stage: Publish
+    dependsOn: Test
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['Build.Reason'], 'PullRequest'))
+    jobs:
+      - job: Publish
+        steps:
+          - pwsh: ./tools/Publish-PSGallery.ps1
+            displayName: Publish newer module version to PSGallery
+            env:
+              PSGALLERY_API_KEY: $(PSGALLERY_API_KEY)

@@ -10,9 +10,15 @@ Properties {
     }
 }
 
+# Run static analysis before Pester initializes its test runspaces. This avoids
+# a PSScriptAnalyzer null-reference failure observed after Pester on PowerShell 7.6.4.
+$PSBTestDependency = @('Analyze', 'Pester')
+
 Task Default -depends Test
 
-Task Test -FromModule PowerShellBuild -minimumVersion '0.6.1'
+Task Test -FromModule PowerShellBuild -minimumVersion '0.8.2'
+
+Task Publish -FromModule PowerShellBuild -minimumVersion '0.8.2'
 
 Task InstallAct {
     if (-not (Get-Command -name act -CommandType Application -ErrorAction SilentlyContinue)) {

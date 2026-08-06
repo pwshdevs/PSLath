@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.6.0] 2026-08-06
+
+### Changed
+
+- Forked and rebranded PSStucco as PSLath.
+- Renamed the public commands to `Get-LathTemplate` and `New-LathModule`.
+- Updated dependency constraints and modernized the generated project template.
+- Added guarded PSGallery publishing to the generated GitHub Actions, GitLab CI, Azure Pipelines, and AppVeyor configurations.
+- Split generated GitHub Actions into `test.yml` and `publish.yml` workflows.
+- Updated generated CI configurations to test both Windows PowerShell 5.1 and PowerShell 7 when a Windows runner is available.
+- Aligned PSLath's own GitHub Actions testing and version-gated publishing workflows with the generated project template.
+- Added a weekly dependency canary that validates clean PowerShell 5.1 and PowerShell 7 environments before opening a versioned dependency-update PR.
+- Pinned generated-module build dependencies while keeping PSLath's root build requirements rolling on `latest`.
+- Changed PSLath runtime dependency constraints to exact `RequiredVersion` pins.
+- Made dependency canary releases update the module manifest, generated requirements, and changelog together.
+
+### Fixed
+
+- Made generated module loaders tolerate empty or missing `Classes`, `Public`, and `Private` directories ([PSStucco#10](https://github.com/jimbrig/PSStucco/issues/10)).
+- Run ScriptAnalyzer before Pester to avoid a PowerShell 7.6.4 analyzer runspace null-reference failure.
+
 ## [0.5.0] 2022-09-15
 
 ### Added

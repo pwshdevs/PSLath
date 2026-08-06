@@ -1,0 +1,38 @@
+default:
+  image: mcr.microsoft.com/powershell:latest
+  before_script:
+    - export DEBIAN_FRONTEND=noninteractive
+    - apt-get update -qq && apt-get install -yqq git > /dev/null
+
+stages:
+  - test
+  - publish
+
+test_powershell:
+  stage: test
+  script:
+    - pwsh -NoProfile -File ./build.ps1 -Task Test -Bootstrap -Verbose
+
+# PowerShell 5.1 requires a self-managed Windows runner tagged "windows".
+# Set ENABLE_WINDOWS_POWERSHELL_TESTS to "true" to add this job to the pipeline.
+test_windows_powershell:
+  inherit:
+    default: false
+  stage: test
+  tags:
+    - windows
+  script:
+    - powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File ./build.ps1 -Task Test -Bootstrap -Verbose
+  rules:
+    - if: '$ENABLE_WINDOWS_POWERSHELL_TESTS == "true"'
+
+publish:
+  stage: publish
+  needs:
+    - job: test_powershell
+    - job: test_windows_powershell
+      optional: true
+  script:
+    - pwsh -NoProfile -File ./tools/Publish-PSGallery.ps1
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

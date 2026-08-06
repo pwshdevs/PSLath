@@ -2,7 +2,12 @@
     PSDependOptions = @{
         Target = 'CurrentUser'
     }
-    'Pester' = 'latest'
+    'Pester' = @{
+        Version = 'latest'
+        Parameters = @{
+            SkipPublisherCheck = $true
+        }
+    }
     'psake' = 'latest'
     'BuildHelpers' = 'latest'
     'Plaster' = 'latest'

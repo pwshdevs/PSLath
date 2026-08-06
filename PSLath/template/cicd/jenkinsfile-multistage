@@ -1,0 +1,57 @@
+pipeline {
+    agent { label 'Windows' }
+
+    stages {
+        stage('Initialize (Windows PowerShell 5.1)') {
+            steps {
+                powershell '.\\build.ps1 -Task Init -Bootstrap'
+            }
+        }
+        stage('Build (Windows PowerShell 5.1)') {
+            steps {
+                powershell '.\\build.ps1 -Task Build'
+            }
+        }
+        stage('Analyze (Windows PowerShell 5.1)') {
+            steps {
+                powershell '.\\build.ps1 -Task Analyze'
+            }
+        }
+        stage('Pester (Windows PowerShell 5.1)') {
+            steps {
+                powershell '.\\build.ps1 -Task Pester'
+            }
+        }
+        stage('Initialize (PowerShell 7)') {
+            steps {
+                pwsh '.\\build.ps1 -Task Init -Bootstrap'
+            }
+        }
+        stage('Build (PowerShell 7)') {
+            steps {
+                pwsh '.\\build.ps1 -Task Build'
+            }
+        }
+        stage('Analyze (PowerShell 7)') {
+            steps {
+                pwsh '.\\build.ps1 -Task Analyze'
+            }
+        }
+        stage('Pester (PowerShell 7)') {
+            steps {
+                pwsh '.\\build.ps1 -Task Pester'
+            }
+        }
+        stage('Publish') {
+            when {
+                buildingTag()
+            }
+            environment {
+                PSGALLERY_API_KEY = credentials('PSGALLERY_API_KEY')
+            }
+            steps {
+                pwsh '.\\tools\\Publish-PSGallery.ps1'
+            }
+        }
+    }
+}

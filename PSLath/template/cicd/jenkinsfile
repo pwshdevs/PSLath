@@ -1,0 +1,27 @@
+pipeline {
+    agent { label 'Windows' }
+
+    stages {
+        stage('Test (Windows PowerShell 5.1)') {
+            steps {
+                powershell '.\\build.ps1 -Task Test -Bootstrap'
+            }
+        }
+        stage('Test (PowerShell 7)') {
+            steps {
+                pwsh '.\\build.ps1 -Task Test -Bootstrap'
+            }
+        }
+        stage('Publish') {
+            when {
+                buildingTag()
+            }
+            environment {
+                PSGALLERY_API_KEY = credentials('PSGALLERY_API_KEY')
+            }
+            steps {
+                pwsh '.\\tools\\Publish-PSGallery.ps1'
+            }
+        }
+    }
+}
