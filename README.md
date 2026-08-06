@@ -97,9 +97,9 @@ The publishing workflow also finishes successfully without publishing when the
 The goal of this project is help create common patterns for PowerShell module development.
 Additional features or capabilities that benefit the community are welcome.
 
-[github-actions-badge]: https://img.shields.io/github/actions/workflow/status/pwshdevs/PSLath/test.yaml?label=build&style=for-the-badge
-[github-actions-badge-publish]: https://img.shields.io/github/actions/workflow/status/pwshdevs/PSLath/publish.yaml?label=publish&style=for-the-badge
-[github-actions-badge-canary]: https://img.shields.io/github/actions/workflow/status/pwshdevs/PSLath/canary.yaml?label=publish&style=for-the-badge
+[github-actions-badge]: https://img.shields.io/github/actions/workflow/status/pwshdevs/PSLath/test.yml?label=build&style=for-the-badge
+[github-actions-badge-publish]: https://img.shields.io/github/actions/workflow/status/pwshdevs/PSLath/publish.yml?label=publish&style=for-the-badge
+[github-actions-badge-canary]: https://img.shields.io/github/actions/workflow/status/pwshdevs/PSLath/canary.yml?label=publish&style=for-the-badge
 [github-actions-build]: https://github.com/pwshdevs/PSLath/actions
 [psgallery-badge]: https://img.shields.io/powershellgallery/dt/PSLath?label=downloads&style=for-the-badge
 [psgallery]: https://www.powershellgallery.com/packages/PSLath
