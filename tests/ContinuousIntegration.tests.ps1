@@ -72,6 +72,9 @@ Describe 'PSLath continuous integration' {
     It 'Promotes canaries through a versioned bot branch and pull request' {
         $workflow = Get-Content -Raw -LiteralPath (Join-Path $projectRoot '.github/workflows/canary.yml')
 
+        $workflow | Should -Not -Match 'shell:\s*\$\{\{\s*matrix\.'
+        $workflow | Should -Match "if: matrix\.edition == 'powershell-7'"
+        $workflow | Should -Match "if: matrix\.edition == 'windows-powershell'"
         $workflow | Should -Match 'chore/dependency-canary-\$env:PROPOSED_VERSION'
         $workflow | Should -Match 'pull-requests:\s*write'
         $workflow | Should -Match 'needs\.validate\.result == ''success'''

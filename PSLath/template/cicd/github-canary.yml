@@ -82,9 +82,9 @@ jobs:
       matrix:
         include:
           - name: PowerShell 7
-            shell: pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "& '{0}'"
+            edition: powershell-7
           - name: Windows PowerShell 5.1
-            shell: powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "& '{0}'"
+            edition: windows-powershell
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -104,13 +104,19 @@ jobs:
               git apply $patchPath
           }
 
-      - name: Remove preinstalled build dependencies
-        shell: ${{ matrix.shell }}
-        run: ./tools/Remove-BuildDependencies.ps1
+      - name: Validate with PowerShell 7
+        if: matrix.edition == 'powershell-7'
+        shell: pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "& '{0}'"
+        run: |
+          ./tools/Remove-BuildDependencies.ps1
+          ./tools/Test-DependencyCanary.ps1
 
-      - name: Test exact dependency candidate
-        shell: ${{ matrix.shell }}
-        run: ./tools/Test-DependencyCanary.ps1
+      - name: Validate with Windows PowerShell 5.1
+        if: matrix.edition == 'windows-powershell'
+        shell: powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "& '{0}'"
+        run: |
+          ./tools/Remove-BuildDependencies.ps1
+          ./tools/Test-DependencyCanary.ps1
 
   promote:
     name: Open dependency canary PR
@@ -201,4 +207,3 @@ jobs:
                   --title $title `
                   --body-file $bodyPath
           }
-
