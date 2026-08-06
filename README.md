@@ -9,8 +9,8 @@
 [![PowerShell Gallery][psgallery-badge]][psgallery] [![PSGallery Version][psgallery-version-badge]][psgallery] [![PSGallery Playform][psgallery-platform-badge]][psgallery] [![PSGallery Playform][ps-desktop-badge]][psgallery]
 
 > [!IMPORTANT]
-> This is a rebuild of the [Stucco](https://github.com/devblackops/Stucco) Module with some various tweaks and bugfixes for personal use.
-> Feel free to use also. You can view the differences and details by looking at [the commit changes](https://github.com/devblackops/Stucco/compare/main...pwshdevs:PSLath:main) and the [issues from devblackops/Stucco](https://github.com/devblackops/Stucco/issues).
+> This is a rebuild of the [PSStucco](https://github.com/jimbrig/PSStucco) Module with some various tweaks and bugfixes for personal use.
+> Feel free to use also. You can view the differences and details by looking at [the commit changes](https://github.com/jimbrig/PSStucco/compare/main...pwshdevs:PSLath:main) and the [issues from jimbrig/PSStucco](https://github.com/jimbrig/PSStucco/issues).
 
 ## Contents
 - [Overview](#overview)
@@ -84,9 +84,13 @@ New-LathModule `
 Projects generated with GitHub Actions include a weekly dependency canary. It
 temporarily tests the newest dependency versions on clean Windows runners under
 Windows PowerShell 5.1 and PowerShell 7, then opens a versioned pull request only
-when the validated pins change.
+when the validated pins change. When all pins are already current, the canary
+finishes successfully without running validation or opening a pull request.
 Enable **Allow GitHub Actions to create and approve pull requests** in the
 repository's Actions settings before running the canary promotion job.
+
+The publishing workflow also finishes successfully without publishing when the
+`PSGALLERY_API_KEY` secret is not configured.
 
 ## Contribution
 

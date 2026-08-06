@@ -30,11 +30,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-[**#28**](https://github.com/devblackops/Stucco/pull/28) Add argument completer to -Task parameter of `build.ps1` in module template (via [@webtroter](https://github.com/webtroter))
+[**#28**](https://github.com/jimbrig/PSStucco/pull/28) Add argument completer to -Task parameter of `build.ps1` in module template (via [@webtroter](https://github.com/webtroter))
 
 ### Fixed
 
-[**#PR27**](https://github.com/devblackops/Stucco/pull/27) - Fix comment-based help tests and filtering out common parameters (via [@HeyItsGilbert](https://github.com/HeyItsGilbert))
+[**#PR27**](https://github.com/jimbrig/PSStucco/pull/27) - Fix comment-based help tests and filtering out common parameters (via [@HeyItsGilbert](https://github.com/HeyItsGilbert))
 
 ## [0.4.0] 2021-04-08
 
@@ -59,7 +59,7 @@ parameter name is no longer mandatory (e.g.: `New-StuccoModule C:\my\path\to\mod
 
 ### Added
 
-- [**#PR16**](https://github.com/devblackops/Stucco/pull/16) - Add parameter description to example function in template module (via [@mikejwhat](https://github.com/mikejwhat))
+- [**#PR16**](https://github.com/jimbrig/PSStucco/pull/16) - Add parameter description to example function in template module (via [@mikejwhat](https://github.com/mikejwhat))
 - You can now pass psake [parameters](https://psake.readthedocs.io/en/latest/pass-parameters/) via the template module build script.
 - Added optional VSCode dev container support to Plaster template
 - Added function `Get-StuccoTemplate`
@@ -74,8 +74,8 @@ parameter name is no longer mandatory (e.g.: `New-StuccoModule C:\my\path\to\mod
 
 ### Fixed
 
-- [**#PR22**](https://github.com/devblackops/Stucco/pull/22) - Update dependencies for psake, BuildHelpers, and PSScriptAnalzyer (via [@HP41](https://github.com/HP41))
-- [**#PR19**](https://github.com/devblackops/Stucco/pull/19) - Update tests to support Pester v5 (via [@andrewwillett](https://github.com/andrewwillett))
+- [**#PR22**](https://github.com/jimbrig/PSStucco/pull/22) - Update dependencies for psake, BuildHelpers, and PSScriptAnalzyer (via [@HP41](https://github.com/HP41))
+- [**#PR19**](https://github.com/jimbrig/PSStucco/pull/19) - Update tests to support Pester v5 (via [@andrewwillett](https://github.com/andrewwillett))
 - Classes are now properly supported if the option to include them is selected when creating a module from the template
 
 ## [0.2.0] 2019-11-09

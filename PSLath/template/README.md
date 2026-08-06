@@ -51,6 +51,8 @@ To publish a release only when the manifest version is newer than PSGallery, set
 For CI publishing, configure `PSGALLERY_API_KEY` as a GitHub Actions secret, a
 masked and protected GitLab CI/CD variable, an Azure Pipelines secret variable,
 an AppVeyor secure environment variable, or a Jenkins credential with that name.
+If the key is not configured, the publishing helper reports a successful skip
+without contacting PSGallery or attempting publication.
 GitHub Actions, Azure Pipelines, AppVeyor, and Jenkins test both Windows
 PowerShell 5.1 and PowerShell 7. GitLab tests PowerShell 7 by default; to enable
 its PowerShell 5.1 job, configure a Windows runner tagged `windows` and set the

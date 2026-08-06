@@ -74,6 +74,8 @@ Describe 'PSLath continuous integration' {
         $workflow = Get-Content -Raw -LiteralPath (Join-Path $projectRoot '.github/workflows/canary.yml')
 
         $workflow | Should -Not -Match 'shell:\s*\$\{\{\s*matrix\.'
+        $workflow | Should -Match "if: steps\.resolve\.outputs\.changed == 'true'"
+        $workflow | Should -Match "validate:[\s\S]+?if: needs\.resolve\.outputs\.changed == 'true'"
         $workflow | Should -Match "if: matrix\.edition == 'powershell-7'"
         $workflow | Should -Match "if: matrix\.edition == 'windows-powershell'"
         $workflow | Should -Match 'chore/dependency-canary-\$env:PROPOSED_VERSION'
@@ -87,6 +89,25 @@ Describe 'PSLath continuous integration' {
         $renderedTemplateHelper = $templateHelper.Replace('<%=$PLASTER_PARAM_ModuleName%>', 'PSLath')
 
         $rootHelper | Should -BeExactly $renderedTemplateHelper
+    }
+
+    It 'Skips PSGallery publication successfully when no API key is configured' {
+        $publishHelper = Join-Path $projectRoot 'tools/Publish-PSGallery.ps1'
+        $hadApiKey = Test-Path -LiteralPath Env:PSGALLERY_API_KEY
+        $originalApiKey = $env:PSGALLERY_API_KEY
+        try {
+            Remove-Item -LiteralPath Env:PSGALLERY_API_KEY -ErrorAction SilentlyContinue
+            $decision = & $publishHelper -PassThru
+
+            $decision.ShouldPublish | Should -BeFalse
+            $decision.SkipReason | Should -BeExactly 'MissingApiKey'
+        } finally {
+            if ($hadApiKey) {
+                $env:PSGALLERY_API_KEY = $originalApiKey
+            } else {
+                Remove-Item -LiteralPath Env:PSGALLERY_API_KEY -ErrorAction SilentlyContinue
+            }
+        }
     }
 
     It 'Exposes the PowerShellBuild Publish task' {
