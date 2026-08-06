@@ -13,14 +13,25 @@ function Invoke-ProjectTest {
     )
 
     $buildPath = Join-Path -Path $Path -ChildPath 'build.ps1'
+    $hadGitHubWorkspace = Test-Path -LiteralPath Env:GITHUB_WORKSPACE
+    $originalGitHubWorkspace = $env:GITHUB_WORKSPACE
     Push-Location -LiteralPath $Path
     try {
+        # BuildHelpers prioritizes GITHUB_WORKSPACE over the current directory.
+        # Point it at the project under test so generated modules do not inherit
+        # the parent repository's build and test paths on GitHub-hosted runners.
+        $env:GITHUB_WORKSPACE = $Path
         & $PowerShellPath -NoLogo -NoProfile -ExecutionPolicy Bypass `
             -File $buildPath -Task Test -Bootstrap
         if ($LASTEXITCODE -ne 0) {
             throw "Tests failed in $Path with exit code $LASTEXITCODE."
         }
     } finally {
+        if ($hadGitHubWorkspace) {
+            $env:GITHUB_WORKSPACE = $originalGitHubWorkspace
+        } else {
+            Remove-Item -LiteralPath Env:GITHUB_WORKSPACE -ErrorAction SilentlyContinue
+        }
         Pop-Location
     }
 }

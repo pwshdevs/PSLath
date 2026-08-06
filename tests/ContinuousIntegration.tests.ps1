@@ -66,6 +66,7 @@ Describe 'PSLath continuous integration' {
         )
 
         $testHelper | Should -Match 'Push-Location -LiteralPath \$Path'
+        $testHelper | Should -Match '\$env:GITHUB_WORKSPACE\s*=\s*\$Path'
         $testHelper | Should -Match 'The generated module build was not found'
     }
 
