@@ -99,7 +99,7 @@ Additional features or capabilities that benefit the community are welcome.
 
 [github-actions-badge]: https://img.shields.io/github/actions/workflow/status/pwshdevs/PSLath/test.yml?label=build&style=for-the-badge
 [github-actions-badge-publish]: https://img.shields.io/github/actions/workflow/status/pwshdevs/PSLath/publish.yml?label=publish&style=for-the-badge
-[github-actions-badge-canary]: https://img.shields.io/github/actions/workflow/status/pwshdevs/PSLath/canary.yml?label=publish&style=for-the-badge
+[github-actions-badge-canary]: https://img.shields.io/github/actions/workflow/status/pwshdevs/PSLath/canary.yml?label=canary&style=for-the-badge
 [github-actions-build]: https://github.com/pwshdevs/PSLath/actions
 [psgallery-badge]: https://img.shields.io/powershellgallery/dt/PSLath?label=downloads&style=for-the-badge
 [psgallery]: https://www.powershellgallery.com/packages/PSLath
