@@ -1,6 +1,6 @@
 @{
     RootModule        = 'PSLath.psm1'
-    ModuleVersion     = '0.6.0'
+    ModuleVersion     = '1.0.0'
     GUID              = '0412383c-1e98-431d-9e55-a95a2c0635d6'
     Author            = 'PwshDevs'
     CompanyName       = 'PwshDevs'
