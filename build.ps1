@@ -32,6 +32,35 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
+function Initialize-ProjectModuleBuildEnvironment {
+    param([string]$ProjectRoot)
+
+    Set-BuildEnvironment -Force
+
+    $ProjectRoot = (Resolve-Path -LiteralPath $ProjectRoot).Path
+    $sourceRoot = Join-Path -Path $ProjectRoot -ChildPath 'src'
+    $manifestCandidates = @(
+        Get-ChildItem -LiteralPath $sourceRoot -Directory |
+            ForEach-Object {
+                $candidate = Join-Path -Path $_.FullName -ChildPath "$($_.Name).psd1"
+                if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+                    $candidate
+                }
+            }
+    )
+    if ($manifestCandidates.Count -ne 1) {
+        throw "Expected one module manifest beneath $sourceRoot; found $($manifestCandidates.Count)."
+    }
+
+    $manifestPath = $manifestCandidates[0]
+    $modulePath = Split-Path -Path $manifestPath -Parent
+    $env:BHProjectPath = $ProjectRoot
+    $env:BHProjectName = [System.IO.Path]::GetFileNameWithoutExtension($manifestPath)
+    $env:BHModulePath = $modulePath
+    $env:BHPSModulePath = $modulePath
+    $env:BHPSModuleManifest = $manifestPath
+}
+
 # Bootstrap dependencies
 if ($Bootstrap.IsPresent) {
     Get-PackageProvider -Name Nuget -ForceBootstrap | Out-Null
@@ -49,7 +78,7 @@ if ($Help.IsPresent) {
     Get-PSakeScriptTasks -buildFile $psakeFile  |
         Format-Table -Property Name, Description, Alias, DependsOn
 } else {
-    Set-BuildEnvironment -Force
+    Initialize-ProjectModuleBuildEnvironment -ProjectRoot $PSScriptRoot
     $parameters = @{}
     if ($PSGalleryApiKey) {
         $parameters['galleryApiKey'] = $PSGalleryApiKey

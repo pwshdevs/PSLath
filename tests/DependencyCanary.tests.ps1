@@ -16,10 +16,10 @@ Describe 'Dependency canary promotion' {
             Join-Path $projectRoot 'requirements.psd1'
         )
         $templateRequirements = Import-PowerShellDataFile -LiteralPath (
-            Join-Path $projectRoot 'PSLath/template/requirements.psd1'
+            Join-Path $projectRoot 'src/PSLath/template/requirements.psd1'
         )
         $manifest = Import-PowerShellDataFile -LiteralPath (
-            Join-Path $projectRoot 'PSLath/PSLath.psd1'
+            Join-Path $projectRoot 'src/PSLath/PSLath.psd1'
         )
 
         $rootRequirements.Pester.Version | Should -BeExactly 'latest'
@@ -44,7 +44,7 @@ Describe 'Dependency canary promotion' {
 
     It 'Temporarily rolls and then re-pins a generated module dependency set' {
         $fixtureRoot = Join-Path $TestDrive 'GeneratedProject'
-        $moduleRoot = Join-Path $fixtureRoot 'CanaryFixture'
+        $moduleRoot = Join-Path $fixtureRoot 'src/CanaryFixture'
         New-Item -Path $moduleRoot -ItemType Directory -Force | Out-Null
 
         @"
@@ -77,6 +77,7 @@ Describe 'Dependency canary promotion' {
 
         $result.Changed | Should -BeTrue
         $result.PinnedRequirementsPath | Should -BeExactly 'requirements.psd1'
+        $result.ModuleManifestPath | Should -BeExactly 'src\CanaryFixture\CanaryFixture.psd1'
         $requirements.Pester | Should -BeExactly ([string]$installedPester.Version)
         [string]$manifest.ModuleVersion | Should -BeExactly '1.1.0'
         [string]$manifest.RequiredModules[0].RequiredVersion |
@@ -87,7 +88,7 @@ Describe 'Dependency canary promotion' {
 
     It 'Leaves a template project root rolling while updating its embedded pins' {
         $fixtureRoot = Join-Path $TestDrive 'TemplateProject'
-        $moduleRoot = Join-Path $fixtureRoot 'TemplateFixture'
+        $moduleRoot = Join-Path $fixtureRoot 'src/TemplateFixture'
         $templateRoot = Join-Path $moduleRoot 'template'
         New-Item -Path $templateRoot -ItemType Directory -Force | Out-Null
 
@@ -129,6 +130,7 @@ Describe 'Dependency canary promotion' {
         $changelog = Get-Content -Raw -LiteralPath (Join-Path $fixtureRoot 'CHANGELOG.md')
 
         $result.Changed | Should -BeTrue
+        $result.ModuleManifestPath | Should -BeExactly 'src\TemplateFixture\TemplateFixture.psd1'
         $rootRequirements | Should -Match "Pester\s*=\s*'latest'"
         $templateRequirements.Pester | Should -BeExactly ([string]$installedPester.Version)
         $manifestContent | Should -Match 'RequiredVersion'

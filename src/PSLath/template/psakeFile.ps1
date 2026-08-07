@@ -1,4 +1,4 @@
-Properties {
+properties {
     # PowerShellBuild's bundled BuildHelpers does not discover manifests at
     # src/<ModuleName>/<ModuleName>.psd1, so restore the exact module settings
     # seeded by build.ps1 after PowerShellBuild initializes its defaults.
@@ -16,11 +16,6 @@ Properties {
     $PSBPreference.Build.CompileModule = $false
     $PSBPreference.Help.DefaultLocale = 'en-US'
     $PSBPreference.Test.OutputFile = 'out/testResults.xml'
-    $PSBPreference.Build.CopyDirectories = @()
-    # Publish settings
-    if ($galleryApiKey) {
-        $PSBPreference.Publish.PSRepositoryApiKey = $galleryApiKey.GetNetworkCredential().password
-    }
 }
 
 # Run static analysis before Pester initializes its test runspaces. This avoids
@@ -28,7 +23,7 @@ Properties {
 $PSBTestDependency = @('Analyze', 'Pester')
 $PSBStageFilesDependency = @('RestoreNestedModuleBuildEnvironment')
 
-Task RestoreNestedModuleBuildEnvironment -Depends Clean {
+task RestoreNestedModuleBuildEnvironment -depends Clean {
     # Initialize-PSBuild calls BuildHelpers once more. Restore the nested src
     # values before any task stages, tests, or publishes the module.
     $env:BHProjectName = $PSBPreference.General.ModuleName
@@ -37,18 +32,8 @@ Task RestoreNestedModuleBuildEnvironment -Depends Clean {
     $env:BHPSModuleManifest = $PSBPreference.General.ModuleManifestPath
 }
 
-Task Default -depends Test
+task Default -depends Test
 
-Task Test -FromModule PowerShellBuild -minimumVersion '0.8.2'
+task Test -FromModule PowerShellBuild -minimumVersion '0.8.2'
 
-Task Publish -FromModule PowerShellBuild -minimumVersion '0.8.2'
-
-Task GenerateYAMLHelp -depends GenerateMarkdown {
-    If (-not (Get-Command New-YamlHelp -CommandType Function -ErrorAction SilentlyContinue)) {
-        Install-Module -Name platyPS -Repository PSGallery -Scope CurrentUser -Force
-    }
-    New-YamlHelp -Path './Docs/en-US' -OutputFolder './Docs/en-US' -Force
-}
-
-
-# Get-HelpPreview -Path .\Docs\en-US\PSXLDevTools-help.xml
+task Publish -FromModule PowerShellBuild -minimumVersion '0.8.2'

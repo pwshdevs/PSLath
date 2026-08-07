@@ -46,7 +46,7 @@
             Tags         = @('Plaster', 'Module', 'Template', 'PSEdition_Core', 'PSEdition_Desktop', 'Windows', 'Linux', 'MacOS')
             LicenseUri   = 'https://raw.githubusercontent.com/pwshdevs/PSLath/main/LICENSE'
             ProjectUri   = 'https://github.com/pwshdevs/PSLath'
-            IconUri      = 'https://raw.githubusercontent.com/pwshdevs/PSLath/main/media/trowel.png'
+            IconUri      = 'https://raw.githubusercontent.com/pwshdevs/PSLath/main/media/lath.png'
             ReleaseNotes = 'https://raw.githubusercontent.com/pwshdevs/PSLath/main/CHANGELOG.md'
         }
     }

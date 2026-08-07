@@ -27,6 +27,9 @@ Get-HelloWorld
 
 ## Development
 
+The module source is stored in `src/<%=$PLASTER_PARAM_ModuleName%>`; build,
+test, documentation, and CI files remain at the project root.
+
 Bootstrap the development dependencies and run the complete test suite:
 
 ```powershell

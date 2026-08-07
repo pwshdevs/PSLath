@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Pinned generated-module build dependencies while keeping PSLath's root build requirements rolling on `latest`.
 - Changed PSLath runtime dependency constraints to exact `RequiredVersion` pins.
 - Made dependency canary releases update the module manifest, generated requirements, and changelog together.
+- Moved PSLath and generated module source into the cleaner `src/<ModuleName>` layout.
 
 ### Fixed
 

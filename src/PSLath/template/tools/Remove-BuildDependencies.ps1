@@ -15,8 +15,16 @@ $ProjectRoot = (Resolve-Path -LiteralPath $ProjectRoot).Path
 $requirementsPaths = @((Join-Path -Path $ProjectRoot -ChildPath 'requirements.psd1'))
 $moduleNames = @('PSDepend')
 $preservedPesterMajorVersion = 3
-$manifestCandidates = @(
+$sourceRoot = Join-Path -Path $ProjectRoot -ChildPath 'src'
+$moduleRoots = @(
+    if (Test-Path -LiteralPath $sourceRoot -PathType Container) {
+        Get-ChildItem -LiteralPath $sourceRoot -Directory
+    }
     Get-ChildItem -LiteralPath $ProjectRoot -Directory |
+        Where-Object Name -ne 'src'
+)
+$manifestCandidates = @(
+    $moduleRoots |
         ForEach-Object {
             $candidate = Join-Path -Path $_.FullName -ChildPath "$($_.Name).psd1"
             if (Test-Path -LiteralPath $candidate -PathType Leaf) {

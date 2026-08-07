@@ -41,8 +41,16 @@ if ([string]::IsNullOrWhiteSpace($ProjectRoot)) {
 }
 $ProjectRoot = (Resolve-Path -LiteralPath $ProjectRoot).Path
 $powerShellPath = (Get-Process -Id $PID).Path
-$manifestPaths = @(
+$sourceRoot = Join-Path -Path $ProjectRoot -ChildPath 'src'
+$moduleRoots = @(
+    if (Test-Path -LiteralPath $sourceRoot -PathType Container) {
+        Get-ChildItem -LiteralPath $sourceRoot -Directory
+    }
     Get-ChildItem -LiteralPath $ProjectRoot -Directory |
+        Where-Object Name -ne 'src'
+)
+$manifestPaths = @(
+    $moduleRoots |
         ForEach-Object {
             $candidate = Join-Path -Path $_.FullName -ChildPath "$($_.Name).psd1"
             if (Test-Path -LiteralPath $candidate -PathType Leaf) {
@@ -101,7 +109,7 @@ try {
     Invoke-ProjectTest -Path $generatedProjectPath -PowerShellPath $powerShellPath
 
     $generatedManifestPath = Join-Path -Path $generatedProjectPath `
-        -ChildPath "$generatedModuleName/$generatedModuleName.psd1"
+        -ChildPath "src/$generatedModuleName/$generatedModuleName.psd1"
     $generatedManifest = Import-PowerShellDataFile -LiteralPath $generatedManifestPath
     $generatedBuildManifestPath = Join-Path -Path $generatedProjectPath `
         -ChildPath "Output/$generatedModuleName/$($generatedManifest.ModuleVersion)/$generatedModuleName.psd1"

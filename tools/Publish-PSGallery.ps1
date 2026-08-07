@@ -9,7 +9,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Path $PSScriptRoot -Parent
-$manifestPath = Join-Path -Path $projectRoot -ChildPath "$ModuleName/$ModuleName.psd1"
+$manifestPath = Join-Path -Path $projectRoot -ChildPath "src/$ModuleName/$ModuleName.psd1"
 if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) {
     throw "Module manifest not found: $manifestPath"
 }

@@ -13,8 +13,16 @@ $ErrorActionPreference = 'Stop'
 function Get-ProjectManifestPath {
     param([string]$Root)
 
-    $candidates = @(
+    $sourceRoot = Join-Path -Path $Root -ChildPath 'src'
+    $moduleRoots = @(
+        if (Test-Path -LiteralPath $sourceRoot -PathType Container) {
+            Get-ChildItem -LiteralPath $sourceRoot -Directory
+        }
         Get-ChildItem -LiteralPath $Root -Directory |
+            Where-Object Name -ne 'src'
+    )
+    $candidates = @(
+        $moduleRoots |
             ForEach-Object {
                 $candidate = Join-Path -Path $_.FullName -ChildPath "$($_.Name).psd1"
                 if (Test-Path -LiteralPath $candidate -PathType Leaf) {
@@ -23,7 +31,7 @@ function Get-ProjectManifestPath {
             }
     )
     if ($candidates.Count -ne 1) {
-        throw "Expected one module manifest directly beneath $Root; found $($candidates.Count)."
+        throw "Expected one project module manifest beneath $Root; found $($candidates.Count)."
     }
 
     $candidates[0]

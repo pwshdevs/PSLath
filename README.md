@@ -1,4 +1,4 @@
-# PSLath <img src="./media/lath.png" alt="Trowel"  height="8%" width="8%" style="float:right" align="right">
+# PSLath <img src="./media/lath.png" alt="Lath"  height="8%" width="8%" style="float:right" align="right">
 
 **Github**
 
@@ -80,6 +80,9 @@ New-LathModule `
     -Force `
     -NoLogo
 ```
+
+The generated module source lives at `src/MyModule`, keeping the project root
+reserved for build, test, documentation, and CI configuration.
 
 Projects generated with GitHub Actions include a weekly dependency canary. It
 temporarily tests the newest dependency versions on clean Windows runners under

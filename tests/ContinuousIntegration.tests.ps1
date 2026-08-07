@@ -12,21 +12,21 @@ Describe 'PSLath continuous integration' {
 
     It 'Uses the generated GitHub test workflow as its own test workflow' {
         $rootWorkflow = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot '.github/workflows/test.yml')
-        $templateWorkflow = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot 'PSLath/template/cicd/github-test.yml')
+        $templateWorkflow = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot 'src/PSLath/template/cicd/github-test.yml')
 
         $rootWorkflow | Should -BeExactly $templateWorkflow
     }
 
     It 'Uses the generated GitHub publish workflow as its own publish workflow' {
         $rootWorkflow = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot '.github/workflows/publish.yml')
-        $templateWorkflow = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot 'PSLath/template/cicd/github-publish.yml')
+        $templateWorkflow = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot 'src/PSLath/template/cicd/github-publish.yml')
 
         $rootWorkflow | Should -BeExactly $templateWorkflow
     }
 
     It 'Uses the generated dependency canary workflow as its own canary workflow' {
         $rootWorkflow = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot '.github/workflows/canary.yml')
-        $templateWorkflow = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot 'PSLath/template/cicd/github-canary.yml')
+        $templateWorkflow = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot 'src/PSLath/template/cicd/github-canary.yml')
 
         $rootWorkflow | Should -BeExactly $templateWorkflow
     }
@@ -34,7 +34,7 @@ Describe 'PSLath continuous integration' {
     It 'Uses generated copies of the dependency canary helpers' {
         foreach ($helper in 'Update-DependencyPins.ps1', 'Remove-BuildDependencies.ps1', 'Test-DependencyCanary.ps1') {
             $rootHelper = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot "tools/$helper")
-            $templateHelper = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot "PSLath/template/tools/$helper")
+            $templateHelper = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot "src/PSLath/template/tools/$helper")
 
             $rootHelper | Should -BeExactly $templateHelper
         }
@@ -44,7 +44,7 @@ Describe 'PSLath continuous integration' {
         $rootRequirements = Import-PowerShellDataFile -LiteralPath (
             Join-Path $projectRoot 'requirements.psd1'
         )
-        $templateRequirements = Get-Content -Raw -LiteralPath (Join-Path $projectRoot 'PSLath/template/requirements.psd1')
+        $templateRequirements = Get-Content -Raw -LiteralPath (Join-Path $projectRoot 'src/PSLath/template/requirements.psd1')
 
         $rootRequirements.Pester.Version | Should -BeExactly 'latest'
         $rootRequirements.Pester.Parameters.SkipPublisherCheck | Should -BeTrue
@@ -85,7 +85,7 @@ Describe 'PSLath continuous integration' {
 
     It 'Uses a rendered copy of the generated conditional publishing helper' {
         $rootHelper = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot 'tools/Publish-PSGallery.ps1')
-        $templateHelper = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot 'PSLath/template/tools/Publish-PSGallery.ps1')
+        $templateHelper = Get-NormalizedContent -LiteralPath (Join-Path $projectRoot 'src/PSLath/template/tools/Publish-PSGallery.ps1')
         $renderedTemplateHelper = $templateHelper.Replace('<%=$PLASTER_PARAM_ModuleName%>', 'PSLath')
 
         $rootHelper | Should -BeExactly $renderedTemplateHelper
@@ -116,9 +116,17 @@ Describe 'PSLath continuous integration' {
     }
 
     It 'Runs ScriptAnalyzer before Pester in both build definitions' {
-        foreach ($buildFile in 'psakeFile.ps1', 'PSLath/template/psakeFile.ps1') {
+        foreach ($buildFile in 'psakeFile.ps1', 'src/PSLath/template/psakeFile.ps1') {
             Get-Content -Raw -LiteralPath (Join-Path $projectRoot $buildFile) |
                 Should -Match '\$PSBTestDependency = @\(''Analyze'', ''Pester''\)'
+        }
+    }
+
+    It 'Seeds PowerShellBuild with the nested src module manifest' {
+        foreach ($buildFile in 'build.ps1', 'src/PSLath/template/build.ps1') {
+            $content = Get-Content -Raw -LiteralPath (Join-Path $projectRoot $buildFile)
+            $content | Should -Match "ChildPath 'src'"
+            $content | Should -Match '\$env:BHPSModuleManifest\s*=\s*\$manifestPath'
         }
     }
 }

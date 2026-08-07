@@ -59,8 +59,9 @@ Describe 'New-LathModule' {
             $templateResult.Success         | Should -Be $true
 
             # Validate some module contents are there
-            (Test-Path $templateTestModulePath/.devcontainer)   | Should -Be $true
-            (Test-Path $templateTestModulePath/$testModuleName) | Should -Be $true
+            (Test-Path $templateTestModulePath/.devcontainer)            | Should -Be $true
+            (Test-Path $templateTestModulePath/src/$testModuleName)      | Should -Be $true
+            (Test-Path $templateTestModulePath/$testModuleName)          | Should -Be $false
         }
     }
 
@@ -71,8 +72,9 @@ Describe 'New-LathModule' {
             $noTemplateResult.Success         | Should -Be $true
 
             # Validate some module contents are there
-            (Test-Path $NoTemplateTestModulePath/.devcontainer)   | Should -Be $true
-            (Test-Path $NoTemplateTestModulePath/$testModuleName) | Should -Be $true
+            (Test-Path $NoTemplateTestModulePath/.devcontainer)            | Should -Be $true
+            (Test-Path $NoTemplateTestModulePath/src/$testModuleName)      | Should -Be $true
+            (Test-Path $NoTemplateTestModulePath/$testModuleName)          | Should -Be $false
         }
     }
 
@@ -104,13 +106,13 @@ Describe 'New-LathModule' {
 
     Context 'Generated module loader' {
         It 'Imports with an empty Classes directory' {
-            $classesPath = Join-Path $templateTestModulePath "$testModuleName/Classes"
+            $classesPath = Join-Path $templateTestModulePath "src/$testModuleName/Classes"
             Get-ChildItem -LiteralPath $classesPath -Filter '*.ps1' -File | Remove-Item -Force
 
             Test-Path -LiteralPath $classesPath -PathType Container | Should -BeTrue
             @(Get-ChildItem -LiteralPath $classesPath -Filter '*.ps1' -File).Count | Should -Be 0
 
-            $manifestPath = Join-Path $templateTestModulePath "$testModuleName/$testModuleName.psd1"
+            $manifestPath = Join-Path $templateTestModulePath "src/$testModuleName/$testModuleName.psd1"
             { Import-Module -Name $manifestPath -Force -ErrorAction Stop } | Should -Not -Throw
             (Get-Command -Name Get-HelloWorld -Module $testModuleName -ErrorAction Stop).Name |
                 Should -Be 'Get-HelloWorld'
@@ -119,11 +121,11 @@ Describe 'New-LathModule' {
 
         It 'Imports with missing script directories' {
             foreach ($directory in 'Classes', 'Private', 'Public') {
-                $directoryPath = Join-Path $noTemplateTestModulePath "$testModuleName/$directory"
+                $directoryPath = Join-Path $noTemplateTestModulePath "src/$testModuleName/$directory"
                 Remove-Item -LiteralPath $directoryPath -Recurse -Force
             }
 
-            $manifestPath = Join-Path $noTemplateTestModulePath "$testModuleName/$testModuleName.psd1"
+            $manifestPath = Join-Path $noTemplateTestModulePath "src/$testModuleName/$testModuleName.psd1"
             { Import-Module -Name $manifestPath -Force -ErrorAction Stop } | Should -Not -Throw
             @(Get-Command -Module $testModuleName).Count | Should -Be 0
             Remove-Module -Name $testModuleName -Force
