@@ -77,7 +77,12 @@ Describe 'Dependency canary promotion' {
 
         $result.Changed | Should -BeTrue
         $result.PinnedRequirementsPath | Should -BeExactly 'requirements.psd1'
-        $result.ModuleManifestPath | Should -BeExactly 'src\CanaryFixture\CanaryFixture.psd1'
+        $expectedManifestPath = [System.IO.Path]::Combine(
+            'src',
+            'CanaryFixture',
+            'CanaryFixture.psd1'
+        )
+        $result.ModuleManifestPath | Should -BeExactly $expectedManifestPath
         $requirements.Pester | Should -BeExactly ([string]$installedPester.Version)
         [string]$manifest.ModuleVersion | Should -BeExactly '1.1.0'
         [string]$manifest.RequiredModules[0].RequiredVersion |
@@ -130,7 +135,12 @@ Describe 'Dependency canary promotion' {
         $changelog = Get-Content -Raw -LiteralPath (Join-Path $fixtureRoot 'CHANGELOG.md')
 
         $result.Changed | Should -BeTrue
-        $result.ModuleManifestPath | Should -BeExactly 'src\TemplateFixture\TemplateFixture.psd1'
+        $expectedManifestPath = [System.IO.Path]::Combine(
+            'src',
+            'TemplateFixture',
+            'TemplateFixture.psd1'
+        )
+        $result.ModuleManifestPath | Should -BeExactly $expectedManifestPath
         $rootRequirements | Should -Match "Pester\s*=\s*'latest'"
         $templateRequirements.Pester | Should -BeExactly ([string]$installedPester.Version)
         $manifestContent | Should -Match 'RequiredVersion'
