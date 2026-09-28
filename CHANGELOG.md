@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.1] 2026-09-28
+
+### Changed
+
+- Validated and pinned `BuildHelpers` at `2.0.16`.
+- Validated and pinned `Pester` at `6.2.0`.
+- Validated and pinned `Plaster` at `2.1.5`.
+- Validated and pinned `PowerShellBuild` at `0.8.2`.
+- Validated and pinned `psake` at `5.0.4`.
+- Validated and pinned `PSDepend` at `0.5.0`.
+- Validated and pinned `PSScriptAnalyzer` at `1.25.0`.
+
 ## [1.0.0] 2026-08-06
 
 ### Changed
