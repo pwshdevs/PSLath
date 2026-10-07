@@ -1,6 +1,6 @@
 @{
     RootModule        = 'PSLath.psm1'
-    ModuleVersion     = '1.0.0'
+    ModuleVersion     = '1.0.1'
     GUID              = '0412383c-1e98-431d-9e55-a95a2c0635d6'
     Author            = 'PwshDevs'
     CompanyName       = 'PwshDevs'
@@ -14,7 +14,7 @@
         }
         @{
             ModuleName      = 'Plaster'
-            RequiredVersion = '2.1.3'
+            RequiredVersion = '2.1.5'
         }
         @{
             ModuleName      = 'psake'
